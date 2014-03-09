@@ -1,13 +1,11 @@
 Check the balance of your BTC addresses and sum them up
 
 USAGE:
-======
 
 $ ruby cs_report.rb
 
 
 INPUT FILE:
-===========
 
 Create a src folder
 
@@ -19,7 +17,6 @@ Save this csv input file to the src folder.
 
 
 OUTPUT FILE:
-============
 
 Each run will create a new version of addresses_with_balance.csv in root folder like so
 
