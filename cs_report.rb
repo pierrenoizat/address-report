@@ -8,7 +8,7 @@ require "pry"
 require "active_support/all"
 require "active_model"
 require "mechanize"
-
+require 'terminal-table'
 require 'json'
 require 'pp'
 
@@ -24,7 +24,7 @@ def address_balance(address)
 
   @value = (page.body.to_i)/100000000.0 # balance value converted from Satoshis to BTC
 
-  puts "#{@address + " = " + @value.to_s + " BTC"}\n\n"
+  # puts "#{@address + " = " + @value.to_s + " BTC"}\n\n"
   @value
   end
 
@@ -38,6 +38,8 @@ def address_balance(address)
     File.delete("addresses_with_balance.csv") # delete any previous version of addresses_with_balance.csv file
     end
     
+  rows = [] # rows of the table to be displayed by terminal-table gem
+    
   files.each do |file| # start processing files in src folder
     
     address_array = []
@@ -50,21 +52,31 @@ def address_balance(address)
     
     count = address_array.size # number of addresses in file
     k = 0
-
+  
     puts "#{count.to_s + " addresses"}\n\n"
     
     CSV.open("addresses_with_balance.csv", "ab") do |csv|
+      csv << ["Balance checked as of " + "#{Time.now}"]
       csv << ["#{count.to_s + " addresses"}"]
       while k < count  do
         address_field = address_array[k][0].to_s
         balance = address_balance("#{address_field.to_s}")
         @file_sum = @file_sum + balance
         csv << [address_field, balance.to_s]
+        rows << [address_field, balance.to_s]
+        unless k == count-1
+          rows << :separator
+          end
         k+=1
         end
 
-      puts "#{"TOTAL = " + @file_sum.to_s + " BTC"}\n\n"
       csv << ["TOTAL = " + @file_sum.to_s + " BTC"]
+      
+      table = Terminal::Table.new :title => "Cold Storage #{Time.now}", :headings => ['Address', 'BTC Balance'], :rows => rows
+      table.align_column(1, :right)
+      puts table
+      puts "#{"TOTAL = " + @file_sum.to_s + " BTC"}\n\n"
+      
       end # of CSV write to addresses_with_balance.csv output file
       
     end # of input file processing
