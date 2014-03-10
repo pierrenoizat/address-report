@@ -12,10 +12,10 @@ require 'terminal-table'
 require 'json'
 require 'pp'
 
+
 def relative_path(path)
   File.expand_path(path, File.dirname(__FILE__))
 end
-
  
 def address_balance(address)
   @address= address
@@ -23,16 +23,14 @@ def address_balance(address)
   page = @agent.get string
 
   @value = (page.body.to_i)/100000000.0 # balance value converted from Satoshis to BTC
-
-  # puts "#{@address + " = " + @value.to_s + " BTC"}\n\n"
-  @value
   end
+
 
   begin
     
   BASE_URL= 'https://blockchain.info/q/addressbalance/'
   CONFIRMATIONS = '6'
-  files = Dir.glob(relative_path('src/*.csv')) # csv file in src folder contains all addresses on one row
+  files = Dir.glob(relative_path('src/*.csv')) # csv file in src folder containing all addresses on one row
   @agent = Mechanize.new
   if File.exists?("addresses_with_balance.csv")
     File.delete("addresses_with_balance.csv") # delete any previous version of addresses_with_balance.csv file
@@ -50,12 +48,12 @@ def address_balance(address)
           end
         end # of read input file
     
-    count = address_array.size # number of addresses in file
+    count = address_array.size # number of addresses in source file
     k = 0
   
     puts "#{count.to_s + " addresses"}\n\n"
     
-    CSV.open("addresses_with_balance.csv", "ab") do |csv|
+    CSV.open("addresses_with_balance.csv", "ab") do |csv| # output addresses and their balance to addresses_with_balance.csv file
       csv << ["Balance checked as of " + "#{Time.now}"]
       csv << ["#{count.to_s + " addresses"}"]
       while k < count  do
