@@ -24,3 +24,6 @@ Each run will create a new version of "addresses_with_balance.csv" in root folde
 >12Zzv5TDchY94V8F4WSqyiLvqvnM8V4N2a, 250.0
 
 >TOTAL = 500.0 BTC
+
+#####TIP:
+Above addresses are NOT mine!. They are given as a test vector. My bitcoin tip jar is 1PierreFUi7RuFkkA812MQyRruDZhzzh7Y.
